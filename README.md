@@ -1,5 +1,8 @@
 # AI-Powered Resume Analyzer
 
+(Updated)
+
+
 This project aims to provide a comprehensive tool for analyzing resumes using AI.
 
 ## Features
