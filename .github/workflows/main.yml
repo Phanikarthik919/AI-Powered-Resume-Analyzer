@@ -1,0 +1,41 @@
+name: AI Resume Analyzer CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: FRONTEND/package-lock.json
+      - name: Install Dependencies
+        working-directory: ./FRONTEND
+        run: npm install
+      - name: Build
+        working-directory: ./FRONTEND
+        run: npm run build
+
+  build-backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: BACKEND/package-lock.json
+      - name: Install Dependencies
+        working-directory: ./BACKEND
+        run: npm install
+      # Add test command here when you have tests
+      # - run: npm test
