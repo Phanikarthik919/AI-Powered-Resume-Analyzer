@@ -1,0 +1,12 @@
+node_modules/
+.env
+*.log
+.DS_Store
+BACKEND/node_modules/
+BACKEND/.env
+BACKEND/backend.log
+BACKEND/uploads/
+FRONTEND/node_modules/
+FRONTEND/dist/
+FRONTEND/*.log
+myResume.pdf
