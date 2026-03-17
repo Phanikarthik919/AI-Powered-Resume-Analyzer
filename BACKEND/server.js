@@ -20,7 +20,7 @@ app.use(cookieParser());
 
 //connect apis
 app.use("/api/user-api", userApp);
-app.use("/common-api", commonRoute);
+app.use("/api/common-api", commonRoute);
 
 //connect to DB
 connectDB();
