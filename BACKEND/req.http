@@ -1,0 +1,59 @@
+### register
+POST http://localhost:5000/user-api/register
+Content-Type: application/json
+
+{
+  "name": "Lucky",
+  "email": "lucky@gmail.com",
+  "password": "123456"
+}
+
+###login
+POST http://localhost:5000/common-api/login
+Content-Type: application/json
+
+{
+  "email": "lucky@gmail.com",
+  "password": "12345"
+}
+
+###logout
+GET http://localhost:5000/common-api/logout
+
+
+### test
+GET http://localhost:5000/user-api/user
+
+### change password
+PATCH http://localhost:5000/common-api/change-password
+Content-Type: application/json
+
+{
+  "currentPassword":"123456",
+  "newPassword":"12345",
+  "confirmNewPassword":"12345"
+}
+
+
+### Upload Resume
+POST http://localhost:5000/user-api/upload-resume
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary
+
+------WebKitFormBoundary
+Content-Disposition: form-data; name="resumeName"
+
+My Resume
+------WebKitFormBoundary
+Content-Disposition: form-data; name="targetRole"
+
+Frontend Developer
+------WebKitFormBoundary
+Content-Disposition: form-data; name="resume"; filename="resume.pdf"
+Content-Type: application/pdf
+
+< ./myResume.pdf
+------WebKitFormBoundary--
+
+
+### get all user-resumes
+GET http://localhost:5000/user-api/user-resumes
