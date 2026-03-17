@@ -19,7 +19,7 @@ app.use(exp.json());
 app.use(cookieParser());
 
 //connect apis
-app.use("/user-api", userApp);
+app.use("/api/user-api", userApp);
 app.use("/common-api", commonRoute);
 
 //connect to DB
