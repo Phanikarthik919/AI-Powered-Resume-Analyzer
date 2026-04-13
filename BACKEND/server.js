@@ -12,7 +12,8 @@ config();
 const app = exp();
 
 //add cors
-app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
+const allowedOrigins = [process.env.FRONTEND_URL, 'http://localhost:5173', 'http://localhost:5174', 'http://localhost:5175'];
+app.use(cors({ origin: allowedOrigins, credentials: true }));
 
 //add middlewares
 app.use(exp.json());
