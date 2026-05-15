@@ -15,10 +15,11 @@ commonRoute.post("/login", async (req, res) => {
     //call authenticate service
     let { token, user } = await authenticate(userCred);
     //save token as httpOnlyCookie
+    const isProduction = process.env.NODE_ENV === "production";
     res.cookie("token", token, {
       httpOnly: true,
-      sameSite: "lax",
-      secure: false,
+      sameSite: isProduction ? "none" : "lax",
+      secure: isProduction,
     });
     //send res
     return res.status(200).json({ message: "Login Successful", payload: user });
@@ -30,10 +31,11 @@ commonRoute.post("/login", async (req, res) => {
 //logout Route (common for User,Author,Admin)
 commonRoute.get("/logout", async (req, res) => {
   // Clear the cookie named 'token'
+  const isProduction = process.env.NODE_ENV === "production";
   res.clearCookie("token", {
     httpOnly: true, // Must match original  settings
-    secure: false, // Must match original  settings
-    sameSite: "lax", // Must match original  settings
+    sameSite: isProduction ? "none" : "lax",
+    secure: isProduction,
   });
   res.status(200).json({ message: "Logged out Successfully" });
 });
