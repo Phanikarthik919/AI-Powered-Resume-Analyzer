@@ -32,7 +32,8 @@ export const formGroup      = "mb-4"
 export const submitBtn      = "w-full bg-[#0066cc] text-white font-semibold py-2.5 rounded-full hover:bg-[#004499] transition-colors cursor-pointer mt-2 text-sm tracking-tight"
 
 // ─── Navbar ───────────────────────────────────────────
-export const navbarClass        = "bg-white/85 backdrop-blur-xl backdrop-saturate-150 border-b border-[#e8e8ed] px-8 h-[52px] flex items-center sticky top-0 z-50"
+export const navbarClass        = "bg-white/70 backdrop-blur-xl border-b border-white/20 px-8 h-[64px] flex items-center sticky top-0 z-50 shadow-sm"
+
 export const navContainerClass  = "max-w-5xl mx-auto w-full flex items-center justify-between"
 export const navBrandClass      = "text-base font-semibold text-[#1d1d1f] tracking-tight"
 export const navLinksClass      = "flex items-center gap-7"
@@ -57,3 +58,10 @@ export const emptyStateClass    = "text-center text-[#a1a1a6] py-16 text-sm"
 
 // ─── Divider ──────────────────────────────────────────
 export const divider            = "border-t border-[#e8e8ed] my-10"
+
+// ─── Luxury Effects ───────────────────────────────────
+export const glassPanel         = "bg-white/70 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_0_rgba(31,38,135,0.04)]"
+export const fadeInUp           = "animate-fade-in-up"
+export const hoverLift          = "hover-lift"
+export const hoverGlow          = "hover-glow"
+

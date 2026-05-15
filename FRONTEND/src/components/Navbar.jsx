@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import useAuthStore from "../store/authStore";
-import { logoutUser } from "../services/api";
+import UserProfile from "./UserProfile";
 import {
   navbarClass,
   navContainerClass,
@@ -13,23 +12,13 @@ import {
 
 function Navbar() {
   const navigate = useNavigate();
-  const { user, logout } = useAuthStore();
-
-  const handleLogout = async () => {
-    try {
-      await logoutUser();
-    } catch (err) {
-      console.error("Logout API failed", err);
-    }
-    logout();
-    navigate("/login");
-  };
+  const { user } = useAuthStore();
 
   return (
     <nav className={navbarClass}>
       <div className={navContainerClass}>
-        <Link to="/" className={navBrandClass}>
-          ☁️ ResumeAI
+        <Link to="/" className={`${navBrandClass} flex items-center gap-2 text-lg`}>
+          <span className="text-xl">☁️</span> ResumeAI
         </Link>
 
         <div className={navLinksClass}>
@@ -49,27 +38,16 @@ function Navbar() {
               </Link>
             </>
           )}
+
+          <div className="h-4 w-px bg-[#e8e8ed] mx-2 hidden sm:block" />
+
           {user ? (
-            <div className="flex items-center gap-4">
-              <Link to="/profile" className="flex items-center gap-2 group">
-                {user.profilePicture ? (
-                  <img src={user.profilePicture} alt="Profile" className="w-6 h-6 rounded-full object-cover" />
-                ) : (
-                  <span className="text-xl">👤</span>
-                )}
-                <span className="text-sm font-medium text-[#1d1d1f] hidden sm:block group-hover:text-[#0066cc] transition-colors">
-                  {user.name}
-                </span>
-              </Link>
-              <button
-                className={`${primaryBtn} !bg-[#ff3b30] hover:!bg-[#cc2f26]`}
-                onClick={handleLogout}
-              >
-                Logout
-              </button>
-            </div>
+            <UserProfile />
           ) : (
-            <button className={primaryBtn} onClick={() => navigate("/login")}>
+            <button 
+              className={primaryBtn} 
+              onClick={() => navigate("/login")}
+            >
               Sign In
             </button>
           )}

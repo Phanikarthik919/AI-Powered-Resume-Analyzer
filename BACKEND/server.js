@@ -11,7 +11,7 @@ config();
 //create server-app
 const app = exp();
 
-// Request logging middlewareun autharized request
+// Request logging middleware unautharized request
 
 app.use((req, res, next) => {
   console.log(`${req.method} ${req.url}`);
