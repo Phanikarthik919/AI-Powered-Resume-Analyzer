@@ -258,5 +258,3 @@ To enable seamless SPA routing on Vercel, a **`vercel.json`** file is configured
 ```
 
 ---
-
-*Designed with ❤️ in alignment with the Google Deepmind Advanced Agentic Coding specifications.*
