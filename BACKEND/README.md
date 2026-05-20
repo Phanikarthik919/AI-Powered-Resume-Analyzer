@@ -1,121 +1,233 @@
-# BACKEND Server & Data Blueprint
+# ResAI Backend — Enterprise RESTful API
 
-**[🖥️ Hosted API Server (Backend)](https://resai-backend-gepb.onrender.com)**
+A robust, enterprise-grade, secure RESTful API built on the MERN stack for the **AI-Powered Resume Analyzer**. This API supports secure authentication, intelligent PDF parsing, AI-driven resume scoring using state-of-the-art LLMs (Groq, Gemini, OpenAI), and secure media uploads via Cloudinary.
 
-*Written for the engineers handling data parsing, security rules, and database stability.*
-
-## 🚀 Quick Start
-
-1. Install dependencies:
-   ```bash
-   npm install
-   ```
-2. Create a `.env` file in this directory and add the required variables:
-   ```env
-   PORT=4000
-   MONGO_URI=mongodb://localhost:27017/resume-analyzer
-   FRONTEND_URL=http://localhost:5173
-   JWT_SECRET_KEY=your_secret_key
-   GROQ_API_KEY=your_groq_api_key
-   CLOUDINARY_CLOUD_NAME=your_cloud_name
-   CLOUDINARY_API_KEY=your_cloudinary_api_key
-   CLOUDINARY_API_SECRET=your_cloudinary_api_secret
-   ```
-3. Start the development server:
-   ```bash
-   npm run dev
-   ```
+🔗 **Live Production API Base URL:** [resai-backend-gepb.onrender.com](https://resai-backend-gepb.onrender.com)
 
 ---
 
-## ⚙️ Server Architecture Overview
+## 🛠️ Tech Stack & Key Integrations
 
-- **Framework Setup:** Node.js runtime powered by the Express.js framework.
-- **Database Modeler:** Mongoose ODM for MongoDB Atlas.
-- **Security Wrappers:** Custom JWT middleware for route protection, bcryptjs for password hashing, and dynamic CORS configuration supporting both local environments and Vercel domains.
+*   **Core Server Framework:** Node.js & Express (v5.2.x for modern routing capabilities)
+*   **Database & Object Modeling:** MongoDB & Mongoose (Schema validation, populated relations, and strict entity structuring)
+*   **Security & Encryption:** JWT (JSON Web Tokens) via `httpOnly` cookies, bcryptjs (password hashing)
+*   **Media Storage Pipeline:** Cloudinary API integrated with Multer for secure file hand-offs
+*   **AI & Document Parsing:** `pdf-parse` & `pdfjs-dist` for raw text extraction, combined with multi-provider SDK integrations (`groq-sdk`, `@google/genai`, `openai`) for semantic ATS analysis
+*   **Config Management:** Dotenv for secure local and staging environment variables
+*   **API Testing Framework:** Integrated Rest Client HTTP test suite (`req.http`)
 
-## 📂 Server Directory Map
+---
+
+## 🏗️ Architecture & Flow Diagram
+
+The following architecture diagram represents the request-response lifecycle from the client app down to the database, cloud storage, and AI inference engines:
+
+```mermaid
+graph TD
+    Client[Client App: React / REST Client] -->|HTTP Requests / Cookies| CORS[CORS & Options Pre-flight Filter]
+    CORS --> CookieParser[Cookie Parser & JSON Body Middleware]
+    CookieParser --> Router{Route Dispatcher}
+    
+    Router -->|/common-api| CommonRouter[Common Controller]
+    Router -->|/user-api| UserRouter[User Controller]
+    
+    UserRouter --> verifyToken[verifyToken Middleware]
+    CommonRouter --> AuthServ[Auth Service: register / authenticate]
+    
+    verifyToken --> UserDB[Mongoose Models: UserModel & ResumeModel]
+    
+    AuthServ --> DB[(MongoDB Database)]
+    UserDB --> DB
+    
+    UserRouter --> Multer[Multer Temporary Storage]
+    Multer --> Cloudinary[Cloudinary Media Server]
+    
+    UserRouter --> Parser[PDF Text Extraction]
+    Parser --> AI[AI Inference Engine: Groq / Gemini / OpenAI]
+    AI --> UserDB
+```
+
+---
+
+## 📂 Project Directory Structure
+
+Here is a high-level mapping of the project's codebase:
 
 ```text
 BACKEND/
-├── APIs/             # Business logic controllers and route paths (UserAPI, CommonAPI)
-├── config/           # Database connection logic and Cloudinary SDK configurations
-├── middlewares/      # Structural middleware (verifyToken, multer)
-├── models/           # Entity data models (UserSchema, ResumeSchema)
-├── services/         # Utility helpers (analyzeResume.js, extractPdfText.js)
-└── server.js         # Entry point, global error interceptor, CORS rules
+├── APIs/                  # REST Controllers & Routes
+│   ├── CommonAPI.js       # Common endpoints (login, logout, token check)
+│   └── UserAPI.js         # User endpoints (registration, resume upload, analysis history)
+├── config/                # Service Integrations & Configurations
+│   ├── cloudinary.js      # Cloudinary SDK wrapper initialization
+│   ├── db.js              # Mongoose database connector
+│   ├── gemini.js          # Google Gemini AI configuration
+│   └── openai.js          # OpenAI SDK configuration
+├── middlewares/           # Global Express interceptors
+│   ├── verifyToken.js     # JWT token decoder (extracts from secure HTTP-only cookies)
+│   └── multer.js          # File filter validation & temporary storage controls
+├── models/                # Mongoose Database Schemas
+│   ├── ResumeSchema.js    # Schema for uploaded resumes and AI ATS insights
+│   └── UserSchema.js      # User Schema for authentication and profile data
+├── services/              # Business Logic & Document Processing
+│   ├── analyzeResume.js   # Interacts with AI to score and critique resumes
+│   └── extractPdfText.js  # Wrapper around pdf-parse to extract clean strings
+├── uploads/               # Temporary local folder generated by Multer
+├── .env                   # Local server configuration variables (ignored in Git)
+├── .gitignore             # Git untracked files specification
+├── package.json           # Application dependencies & starting scripts
+├── req.http               # Pre-defined HTTP REST Client test suite
+└── server.js              # Application entry point, DB connector, & error middlewares
 ```
-
-## 🗄️ Database Schemas & Entities
-
-The MongoDB database maintains two primary collections, structured and enforced via Mongoose.
-
-### 1. User Schema (`users`)
-Responsible for authentication and profile management.
-```javascript
-{
-  _id: ObjectId,
-  name: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true }, // Hashed via bcrypt
-  profilePicture: { type: String, default: "" },
-  createdAt: Timestamp,
-  updatedAt: Timestamp
-}
-```
-
-### 2. Resume Schema (`resumes`)
-Responsible for tracking Cloudinary assets, the user it belongs to, and the Groq AI ATS analysis.
-```javascript
-{
-  _id: ObjectId,
-  userId: { type: ObjectId, ref: "user", required: true }, // Foreign Key
-  resumeName: { type: String, required: true },
-  targetRole: { type: String, required: true },
-  jobDescription: { type: String, default: "" },
-
-  // Cloudinary Storage
-  fileUrl: { type: String, required: true },
-  filePublicId: { type: String, required: true },
-
-  // AI Analysis Results
-  atsScore: { type: Number, default: 0 },
-  scoringBreakdown: { sections, keywords, metrics, projects, education, penalties },
-  missingSkills: [{ type: String }],
-  aiSuggestions: [{ type: String }],
-  analysisSummary: { type: String },
-  
-  // Raw Data
-  resumeText: { type: String, default: "" },
-  parsedData: { type: Object, default: {} },
-  status: { type: String, enum: ["uploading", "processing", "completed", "failed"] },
-
-  createdAt: Timestamp,
-  updatedAt: Timestamp
-}
-```
-
-## 🔒 Middleware Gatekeepers
-
-- **Authentication Handlers:** `middlewares/verifyToken.js` extracts the HTTP-Only JWT from cookies, verifies it against the secret key, and populates `req.user`.
-- **Global Error Interceptor:** Found at the bottom of `server.js`. Catches gracefully unhandled promise rejections, prevents system trace logs from leaking, and formats unified Mongoose duplicate-key (`11000`) and Validation errors.
-- **File Upload Validation Rules:** `middlewares/multer.js` automatically creates an ephemeral `uploads/` directory to prevent ENOENT crashes on cloud hosts, and manages temporary local storage before Cloudinary hand-off.
 
 ---
 
-## 🔌 API Documentation (Endpoint Registry)
+## 🔑 Environment Configuration
 
-### Auth & Common Resources (`/common-api`)
-| Verb | Pathway | Description | Auth Required | Expected Input / Body | Return Output |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| `POST` | `/common-api/login` | Authenticate user | No | `{ email, password }` | JWT HttpOnly Cookie, `{ message, user }` |
-| `GET` | `/common-api/logout` | Clears auth cookie | Yes | None | `{ message }` |
-| `GET` | `/common-api/check-auth`| Refresh/Auth verification | Yes | None | `{ message, payload }` |
+To run this backend locally, create a `.env` file in the root folder of the `BACKEND` directory with the following keys. Note that in cloud platforms like **Render**, the application port is dynamically assigned at runtime; however, a default local port needs to be specified:
 
-### User & Resume Resources (`/user-api`)
-| Verb | Pathway | Description | Auth Required | Expected Input / Body | Return Output |
+```ini
+# Application Running Port (Defaults to 4000 locally; overridden dynamically in Render)
+PORT=4000
+
+# Database Connection string (MongoDB Atlas or Local MongoDB)
+MONGO_URI=your_mongodb_connection_string
+
+# Frontend Connection configuration
+FRONTEND_URL=http://localhost:5173
+
+# Encryption secrets
+JWT_SECRET_KEY=your_jwt_signature_secret_key
+
+# External AI Integrations
+GROQ_API_KEY=your_groq_api_key
+
+# Cloudinary Integration API credentials
+CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
+CLOUDINARY_API_KEY=your_cloudinary_api_key
+CLOUDINARY_API_SECRET=your_cloudinary_api_secret
+```
+
+---
+
+## 📦 Database Schemas & Data Models
+
+### 1. User Model (`users`)
+Responsible for authentication and profile management. Saved under `models/UserSchema.js`.
+
+| Field | Type | Attributes | Description |
+| :--- | :--- | :--- | :--- |
+| `name` | String | Required | Full name of the user |
+| `email` | String | Required, Unique | Email address used for authentication |
+| `password` | String | Required | Encrypted password (hashed with bcryptjs) |
+| `profilePicture` | String | Default: `""` | Optional URL hosting the user's avatar |
+| `createdAt` | Timestamp | Auto-generated | Timestamp of account creation |
+
+### 2. Resume Model (`resumes`)
+Responsible for tracking Cloudinary assets, the owning user, and the AI ATS analysis. Saved under `models/ResumeSchema.js`.
+
+| Field | Type | Attributes | Description |
+| :--- | :--- | :--- | :--- |
+| `userId` | ObjectId | Required, Ref `user` | Foreign key referencing the author profile |
+| `resumeName` | String | Required | Filename or customized title |
+| `targetRole` | String | Required | Intended job title for AI context |
+| `fileUrl` | String | Required | Cloudinary URL for the uploaded PDF |
+| `filePublicId`| String | Required | Cloudinary Asset ID |
+| `atsScore` | Number | Default: `0` | AI-evaluated compatibility score (0-100) |
+| `scoringBreakdown`| Object | Structure | Detailed section-by-section scoring breakdown |
+| `missingSkills`| Array | String Array | Detected gaps based on target role |
+| `aiSuggestions`| Array | String Array | Actionable improvements from the AI |
+| `status` | String | Enum | `uploading`, `processing`, `completed`, `failed` |
+
+---
+
+## 🛰️ API Reference Guide
+
+### 🔓 Auth & Common Routes (`/common-api`)
+
+| Method | Endpoint | Access | Headers | Body / Parameters | Description |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| `POST` | `/user-api/register` | Register new account | No | `{ name, email, password }` | `{ message, payload }` |
-| `POST` | `/user-api/upload-resume`| Parse, AI Analyze, Save | Yes | `multipart/form-data` (`file`, `targetRole`) | `{ message, payload: ResumeDoc }` |
-| `GET` | `/user-api/user-resumes` | Fetch user's analyses | Yes | None | `{ message, payload: [ResumeDocs] }` |
-| `GET` | `/user-api/resume/:id` | Fetch specific analysis | Yes | `URL Param: id` | `{ message, payload: ResumeDoc }` |
+| **POST** | `/login` | Public | JSON | `{ email, password }` | Authenticates users and sets an `httpOnly` cookie. |
+| **GET** | `/logout` | Auth | Cookie | None | Clears the authorization HTTP-Only token cookie. |
+| **GET** | `/check-auth`| Auth | Cookie | None | Validates current token, returns full profile details. |
+
+### 📄 User & Resume Routes (`/user-api`)
+
+| Method | Endpoint | Access | Headers | Body / Parameters | Description |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **POST** | `/register` | Public | JSON | `{ name, email, password }` | Registers a new user account. |
+| **POST** | `/upload-resume`| Auth | `multipart/form-data` | Form: `file` & `targetRole`| Parses PDF, runs AI inference, saves data, uploads to Cloudinary. |
+| **GET** | `/user-resumes` | Auth | Cookie | None | Retrieves all analyzed resumes for the logged-in user. |
+| **GET** | `/resume/:id` | Auth | Cookie | Parameter: `:id` | Fetches a specific analyzed resume by ID. |
+
+---
+
+## 🔒 Custom Middlewares & Security Stack
+
+### 1. Token Verification Middleware (`verifyToken.js`)
+Robust auth middleware that extracts incoming JWTs from `req.cookies`. Handles invalid or expired sessions and populates the `req.user` object securely before letting requests hit protected routes.
+
+### 2. File Upload Validation Rules (`multer.js`)
+*   **Ephemeral Storage:** Automatically creates an `uploads/` directory to prevent `ENOENT` crashes, managing temporary local storage prior to Cloudinary hand-off.
+*   **Type Guarding:** Restricts uploads specifically to PDF formatting to ensure the `pdf-parse` pipeline succeeds cleanly.
+
+### 3. Application-Level Defenses
+*   **CORS Configuration:** Explicitly maps allowed clients dynamically, enabling `credentials: true` to accept HTTP-Only cookies.
+*   **Global Error Interceptor:** Found in `server.js`, this wrapper catches gracefully unhandled promise rejections and normalizes Mongoose errors (like unique constraint `11000`) before they reach the client.
+
+---
+
+## 🚀 Getting Started & Local Setup
+
+### Prerequisites
+1.  **Node.js:** Ensure Node.js v18+ is installed.
+2.  **Database:** A MongoDB instance running locally, or a MongoDB Atlas URI string.
+3.  **Media Hosting:** Cloudinary credentials for hosting processed resumes.
+4.  **AI Providers:** API Keys for Groq (or Gemini/OpenAI if configured).
+
+### Installation Instructions
+1.  Navigate to the `BACKEND` directory and install dependencies:
+    ```bash
+    npm install
+    ```
+2.  Configure your environment file (`.env`) matching the structure outlined in the Configuration section.
+3.  Boot the application backend:
+    ```bash
+    npm run dev
+    ```
+    *The console should output the active port and confirm database connection success.*
+
+---
+
+## 🌍 Cloud Deployment & Hosting Mappings
+
+This production-ready backend application is successfully deployed as a live web service on **Render**:
+
+🔗 **Live Production API Base URL:** `https://resai-backend-gepb.onrender.com`
+
+### 1. Dynamic Port Allocation on Cloud Services
+You **do not** need to manually configure or hardcode the `PORT` environment variable on your live hosting dashboard. The Express app listens dynamically: `process.env.PORT || 4000`.
+
+### 2. Environment Variables Configuration
+Do not commit your local `.env` file. Configure these values securely under **Environment Variables** on the Render dashboard:
+- `MONGO_URI`
+- `JWT_SECRET_KEY`
+- `GROQ_API_KEY`
+- `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`
+- `FRONTEND_URL` *(Your live Vercel frontend URL)*
+
+---
+
+## 🧪 Testing with REST Client (`req.http`)
+
+The workspace includes a complete suite of mock request tests inside `req.http`. 
+
+To utilize this suite:
+1.  Install the **REST Client** extension in VS Code.
+2.  Open `req.http`.
+3.  Click the **`Send Request`** button appearing above the respective HTTP methods.
+4.  Test full endpoints including registration, login, token verification, and data retrieval dynamically!
+
+---
+
+*Designed with ❤️ in alignment with the Google Deepmind Advanced Agentic Coding specifications.*
