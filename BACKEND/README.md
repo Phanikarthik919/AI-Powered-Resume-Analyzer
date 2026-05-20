@@ -59,26 +59,19 @@ BACKEND/
 
 ---
 
-## 🔌 API Endpoint Registry
+## 🔌 API Documentation (Endpoint Registry)
 
-*A clean reference manual for both frontend and backend engineers to see how data maps across the network.*
-
-### Auth & User (`/common-api`)
-
-| Verb | URI Pathway | Description | Security | Parameters | Payload |
+### Auth & Common Resources (`/common-api`)
+| Verb | Pathway | Description | Auth Required | Expected Input / Body | Return Output |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| `POST` | `/common-api/login` | Authenticate user | Public | Body: `{ email, password }` | `{ message, payload: user }` |
-| `GET` | `/common-api/logout` | Clear HTTP-only token | Public | None | `{ message }` |
-| `PUT` | `/common-api/change-password` | Update password | Token Required | Body: `{ currentPassword, newPassword }` | `{ message }` |
+| `POST` | `/common-api/login` | Authenticate user | No | `{ email, password }` | JWT HttpOnly Cookie, `{ message, user }` |
+| `GET` | `/common-api/logout` | Clears auth cookie | Yes | None | `{ message }` |
+| `GET` | `/common-api/check-auth`| Refresh/Auth verification | Yes | None | `{ message, payload }` |
 
-### Resume Operations (`/user-api`)
-
-| Verb | URI Pathway | Description | Security | Parameters | Payload |
+### User & Resume Resources (`/user-api`)
+| Verb | Pathway | Description | Auth Required | Expected Input / Body | Return Output |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| `POST` | `/user-api/register` | Create a new user account | Public | Body: `{ name, email, password }` | `{ message }` |
-| `POST` | `/user-api/upload-resume` | Uploads PDF, parses text, requests AI ATS analysis, uploads to Cloudinary | Token Required | FormData: `resume` (File), `resumeName`, `targetRole`, `jobDescription` | `{ message, resume: Document }` |
-| `GET` | `/user-api/user-resumes` | Fetch all historical resumes | Token Required | None | `{ message, payload: [Resumes] }` |
-| `GET` | `/user-api/resume/:id` | Fetch specific resume details | Token Required | URL: `id` | `{ message, payload: Resume }` |
-| `PUT` | `/user-api/update-resume/:id` | Update parsed resume fields | Token Required | URL: `id`, Body: `{ parsedData }` | `{ message, payload: Resume }` |
-| `POST` | `/user-api/optimize-section`| AI optimization for specific sections | Token Required | Body: `{ sectionType, content, targetRole }` | `{ message, payload: AI_Response }` |
-| `GET` | `/user-api/resume/:id/download` | Redirect to Cloudinary URL | Token Required | URL: `id` | Redirect (302) |
+| `POST` | `/user-api/register` | Register new account | No | `{ name, email, password }` | `{ message, payload }` |
+| `POST` | `/user-api/upload-resume`| Parse, AI Analyze, Save | Yes | `multipart/form-data` (`file`, `targetRole`) | `{ message, payload: ResumeDoc }` |
+| `GET` | `/user-api/user-resumes` | Fetch user's analyses | Yes | None | `{ message, payload: [ResumeDocs] }` |
+| `GET` | `/user-api/resume/:id` | Fetch specific analysis | Yes | `URL Param: id` | `{ message, payload: ResumeDoc }` |
