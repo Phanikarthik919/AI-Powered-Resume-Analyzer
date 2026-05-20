@@ -2,11 +2,11 @@
 
 A robust, enterprise-grade, secure RESTful API built on the MERN stack for the **AI-Powered Resume Analyzer**. This API supports secure authentication, intelligent PDF parsing, AI-driven resume scoring using state-of-the-art LLMs (Groq, Gemini, OpenAI), and secure media uploads via Cloudinary.
 
-🔗 **Live Production API Base URL:** [resai-backend-gepb.onrender.com](https://resai-backend-gepb.onrender.com)
+ **Live Production API Base URL:** [resai-backend-gepb.onrender.com](https://resai-backend-gepb.onrender.com)
 
 ---
 
-## 🛠️ Tech Stack & Key Integrations
+##  Tech Stack & Key Integrations
 
 *   **Core Server Framework:** Node.js & Express (v5.2.x for modern routing capabilities)
 *   **Database & Object Modeling:** MongoDB & Mongoose (Schema validation, populated relations, and strict entity structuring)
@@ -18,7 +18,7 @@ A robust, enterprise-grade, secure RESTful API built on the MERN stack for the *
 
 ---
 
-## 🏗️ Architecture & Flow Diagram
+##  Architecture & Flow Diagram
 
 The following architecture diagram represents the request-response lifecycle from the client app down to the database, cloud storage, and AI inference engines:
 
@@ -49,7 +49,7 @@ graph TD
 
 ---
 
-## 📂 Project Directory Structure
+##  Project Directory Structure
 
 Here is a high-level mapping of the project's codebase:
 
@@ -82,7 +82,7 @@ BACKEND/
 
 ---
 
-## 🔑 Environment Configuration
+##  Environment Configuration
 
 To run this backend locally, create a `.env` file in the root folder of the `BACKEND` directory with the following keys. Note that in cloud platforms like **Render**, the application port is dynamically assigned at runtime; however, a default local port needs to be specified:
 
@@ -110,7 +110,7 @@ CLOUDINARY_API_SECRET=your_cloudinary_api_secret
 
 ---
 
-## 📦 Database Schemas & Data Models
+##  Database Schemas & Data Models
 
 ### 1. User Model (`users`)
 Responsible for authentication and profile management. Saved under `models/UserSchema.js`.
@@ -141,9 +141,9 @@ Responsible for tracking Cloudinary assets, the owning user, and the AI ATS anal
 
 ---
 
-## 🛰️ API Reference Guide
+##  API Reference Guide
 
-### 🔓 Auth & Common Routes (`/common-api`)
+###  Auth & Common Routes (`/common-api`)
 
 | Method | Endpoint | Access | Headers | Body / Parameters | Description |
 | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -151,7 +151,7 @@ Responsible for tracking Cloudinary assets, the owning user, and the AI ATS anal
 | **GET** | `/logout` | Auth | Cookie | None | Clears the authorization HTTP-Only token cookie. |
 | **GET** | `/check-auth`| Auth | Cookie | None | Validates current token, returns full profile details. |
 
-### 📄 User & Resume Routes (`/user-api`)
+###  User & Resume Routes (`/user-api`)
 
 | Method | Endpoint | Access | Headers | Body / Parameters | Description |
 | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -162,7 +162,7 @@ Responsible for tracking Cloudinary assets, the owning user, and the AI ATS anal
 
 ---
 
-## 🔒 Custom Middlewares & Security Stack
+##  Custom Middlewares & Security Stack
 
 ### 1. Token Verification Middleware (`verifyToken.js`)
 Robust auth middleware that extracts incoming JWTs from `req.cookies`. Handles invalid or expired sessions and populates the `req.user` object securely before letting requests hit protected routes.
@@ -177,7 +177,7 @@ Robust auth middleware that extracts incoming JWTs from `req.cookies`. Handles i
 
 ---
 
-## 🚀 Getting Started & Local Setup
+##  Getting Started & Local Setup
 
 ### Prerequisites
 1.  **Node.js:** Ensure Node.js v18+ is installed.
@@ -199,11 +199,11 @@ Robust auth middleware that extracts incoming JWTs from `req.cookies`. Handles i
 
 ---
 
-## 🌍 Cloud Deployment & Hosting Mappings
+##  Cloud Deployment & Hosting Mappings
 
 This production-ready backend application is successfully deployed as a live web service on **Render**:
 
-🔗 **Live Production API Base URL:** `https://resai-backend-gepb.onrender.com`
+ **Live Production API Base URL:** `https://resai-backend-gepb.onrender.com`
 
 ### 1. Dynamic Port Allocation on Cloud Services
 You **do not** need to manually configure or hardcode the `PORT` environment variable on your live hosting dashboard. The Express app listens dynamically: `process.env.PORT || 4000`.
@@ -218,7 +218,7 @@ Do not commit your local `.env` file. Configure these values securely under **En
 
 ---
 
-## 🧪 Testing with REST Client (`req.http`)
+##  Testing with REST Client (`req.http`)
 
 The workspace includes a complete suite of mock request tests inside `req.http`. 
 

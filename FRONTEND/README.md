@@ -6,7 +6,7 @@
 [![Zustand](https://img.shields.io/badge/Zustand-5.0.12-orange?style=for-the-badge&logo=react&logoColor=white)](https://github.com/pmndrs/zustand)
 [![React Router](https://img.shields.io/badge/React_Router-7.13.1-CA4245?style=for-the-badge&logo=react-router&logoColor=white)](https://reactrouter.com/)
 
-🔗 **Live Production Deploy:** [resai-frontend-cyan.vercel.app](https://resai-frontend-cyan.vercel.app)
+ **Live Production Deploy:** [resai-frontend-cyan.vercel.app](https://resai-frontend-cyan.vercel.app)
 
 Welcome to the **ResAI Frontend Client**—a premium, enterprise-grade, high-fidelity React 19 Single Page Application (SPA) designed to power the user-facing interface of the **AI-Powered Resume Analyzer**.
 
@@ -14,7 +14,7 @@ Inspired by **Apple's iconic, ultra-clean web aesthetics (Apple Light Theme)**, 
 
 ---
 
-## 💎 Core Architecture Highlights
+##  Core Architecture Highlights
 
 ### 1. Apple Light Theme & Design System
 Rather than scattered styling helpers, the visual language is governed by a **centralized design token registry**. Inspired by Apple's minimalist aesthetic:
@@ -40,7 +40,7 @@ Client routes are guarded at the component level:
 
 ---
 
-## 🗺️ Client Navigation & State Architecture
+##  Client Navigation & State Architecture
 
 This diagram visualizes the application's page structure, route protection, and Zustand state synchronization:
 
@@ -54,21 +54,21 @@ graph TD
 
     %% Elements
     Root[" Root Layout (Navbar & Footer)"]:::default
-    Home["🏠 Home Landing Page"]:::default
-    Login["🔑 Login Route"]:::default
-    Register["📝 Register Route"]:::default
+    Home[" Home Landing Page"]:::default
+    Login[" Login Route"]:::default
+    Register[" Register Route"]:::default
     AuthStore[("Zustand Auth Store <br> authStore.js")]:::state
     ResumeStore[("Zustand Resume Store <br> resumeStore.js")]:::state
 
     %% Protected Routes
-    Sec["🔒 ProtectedRoute"]:::secure
+    Sec[" ProtectedRoute"]:::secure
 
     %% Dashboard Panels
-    Dashboard["📊 Analytics Dashboard"]:::secure
-    Upload["☁️ Upload Resume Workspace"]:::ai
-    Analysis["📈 ATS Score Analysis"]:::ai
-    Builder["📝 Resume Builder"]:::ai
-    History["📚 Resume History Table"]:::secure
+    Dashboard[" Analytics Dashboard"]:::secure
+    Upload[" Upload Resume Workspace"]:::ai
+    Analysis[" ATS Score Analysis"]:::ai
+    Builder[" Resume Builder"]:::ai
+    History[" Resume History Table"]:::secure
 
     %% Connections & Navigation
     Root --> Home
@@ -98,7 +98,7 @@ graph TD
 
 ---
 
-## 📂 Project Directory Structure
+##  Project Directory Structure
 
 ```text
 FRONTEND/
@@ -143,7 +143,7 @@ FRONTEND/
 
 ---
 
-## 🛠️ Tech Stack & Key Dependencies
+##  Tech Stack & Key Dependencies
 
 This project leverages a state-of-the-art modern frontend stack:
 * **React 19.2.4:** Utilizing modern React hooks (`useEffect`, `useState`, `useLocation`, `useParams`).
@@ -158,7 +158,7 @@ This project leverages a state-of-the-art modern frontend stack:
 
 ---
 
-## 🔑 Environment Configuration
+##  Environment Configuration
 
 To run this application locally, create a `.env` file in the root `FRONTEND` directory. Vite requires client environment variables to be prefixed with `VITE_` to compile them into the final static build:
 
@@ -169,7 +169,7 @@ VITE_API_URL=http://localhost:4000
 
 ---
 
-## 🚀 Local Sandbox Setup Guide
+##  Local Sandbox Setup Guide
 
 ### 1. Prerequisites
 Ensure you have the following installed on your operating system:
@@ -208,7 +208,7 @@ npm run lint
 
 ---
 
-## 🔗 Backend API Handshake Specifications
+##  Backend API Handshake Specifications
 
 All outgoing HTTP calls made via **Axios** adhere to the following security protocols:
 1. **Cookie Inclusion:** Enable `withCredentials: true` in all axios calls to ensure secure CORS-compliant handshake configurations (e.g. CSRF tokens or cookies mapped by the backend).
@@ -221,7 +221,7 @@ All outgoing HTTP calls made via **Axios** adhere to the following security prot
 
 ---
 
-## 🌐 Production Deployment Guidelines
+##  Production Deployment Guidelines
 
 This full-stack application is optimized for split production hosting:
 * **Frontend SPA:** Hosted on **Vercel** for high-speed edge distribution.
@@ -229,7 +229,7 @@ This full-stack application is optimized for split production hosting:
 
 ---
 
-### 🎨 Frontend Deployment: Vercel
+###  Frontend Deployment: Vercel
 
 Vercel provides native support for Vite-based SPAs. Configure your deployment as follows:
 
