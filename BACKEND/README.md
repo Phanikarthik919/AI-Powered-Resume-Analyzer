@@ -1,5 +1,7 @@
 # BACKEND Server & Data Blueprint
 
+**[🖥️ Hosted API Server (Backend)](https://resai-backend-gepb.onrender.com)**
+
 *Written for the engineers handling data parsing, security rules, and database stability.*
 
 ## 🚀 Quick Start
@@ -46,10 +48,52 @@ BACKEND/
 
 ## 🗄️ Database Schemas & Entities
 
-- **User Credential Tracking:** Tracks `name`, `email`, and securely hashed `password`. Passwords are NEVER returned in API payloads.
-- **Application Data Models:** 
-  - `ResumeSchema`: Tracks file attachment URLs (`fileUrl`, `filePublicId`), relationship references to the User (`userId`), ATS metrics (`atsScore`, `missingSkills`), and creation timestamps.
-- **Visual Data Map:** *(Placeholder: Insert ERD Image Here)*
+The MongoDB database maintains two primary collections, structured and enforced via Mongoose.
+
+### 1. User Schema (`users`)
+Responsible for authentication and profile management.
+```javascript
+{
+  _id: ObjectId,
+  name: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true }, // Hashed via bcrypt
+  profilePicture: { type: String, default: "" },
+  createdAt: Timestamp,
+  updatedAt: Timestamp
+}
+```
+
+### 2. Resume Schema (`resumes`)
+Responsible for tracking Cloudinary assets, the user it belongs to, and the Groq AI ATS analysis.
+```javascript
+{
+  _id: ObjectId,
+  userId: { type: ObjectId, ref: "user", required: true }, // Foreign Key
+  resumeName: { type: String, required: true },
+  targetRole: { type: String, required: true },
+  jobDescription: { type: String, default: "" },
+
+  // Cloudinary Storage
+  fileUrl: { type: String, required: true },
+  filePublicId: { type: String, required: true },
+
+  // AI Analysis Results
+  atsScore: { type: Number, default: 0 },
+  scoringBreakdown: { sections, keywords, metrics, projects, education, penalties },
+  missingSkills: [{ type: String }],
+  aiSuggestions: [{ type: String }],
+  analysisSummary: { type: String },
+  
+  // Raw Data
+  resumeText: { type: String, default: "" },
+  parsedData: { type: Object, default: {} },
+  status: { type: String, enum: ["uploading", "processing", "completed", "failed"] },
+
+  createdAt: Timestamp,
+  updatedAt: Timestamp
+}
+```
 
 ## 🔒 Middleware Gatekeepers
 

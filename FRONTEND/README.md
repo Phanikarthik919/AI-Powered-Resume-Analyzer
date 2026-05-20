@@ -1,5 +1,7 @@
 # FRONTEND UI Blueprint
 
+**[🚀 Live Web Application (Frontend)](https://resai-frontend-cyan.vercel.app)**
+
 *Written specifically for the developers building and maintaining the user interface.*
 
 ## 🚀 Quick Start
@@ -19,13 +21,36 @@
 
 ---
 
-## 🎨 Architecture & Styling Principles
+## 🎨 Component Architecture & Data Flow
 
-- **Framework Specifications:** Built on React 18, utilizing Vite for lightning-fast compilation, hot-module replacement (HMR), and optimized production bundling.
-- **Global Layout Theme Rules:** 
-  - **Styling Engine:** Tailwind CSS is used universally.
-  - **Aesthetic:** A "glassmorphism" design system is implemented via `backdrop-blur` utilities and semi-transparent backgrounds.
-  - **Animations:** Custom keyframes (`float`, `fadeInUp`, `hover-lift`) defined in `src/index.css` provide micro-interactions.
+The React UI is designed using a unidirectional data flow pattern (Zustand $\rightarrow$ Components) and structured into global layout wrappers versus isolated page routes.
+
+```text
+App.jsx (React Router + Auth Interceptors)
+│
+├── Global Layout Components (Always Mounted)
+│   ├── Navbar.jsx (Listens to authStore.js for session state)
+│   │   └── UserProfile.jsx (Dropdown for Logout/Settings)
+│   ├── Footer.jsx
+│   └── BackgroundDecoration.jsx (CSS Glassmorphism Animations)
+│
+└── Route Components (Swapped by React Router)
+    ├── / (Home.jsx)
+    │   └── Landing page hero, features, and call-to-action.
+    │
+    ├── /upload (Upload.jsx) [Protected]
+    │   ├── Drag-and-Drop Zone (Uploads PDF to Multer)
+    │   ├── Role Input Field (Target job selection)
+    │   └── Loading State (Triggers while awaiting Groq AI response)
+    │
+    ├── /dashboard (Dashboard.jsx) [Protected]
+    │   ├── ResumeCard.jsx (Iterates over history)
+    │   ├── Analytics Widgets (Avg Score, Role targets)
+    │   └── Score Distribution Chart
+    │
+    └── Auth Flows (/login, /register)
+        └── Form fields invoking `services/api.js` auth routes.
+```
 
 ## 📂 Client Directory Map
 
