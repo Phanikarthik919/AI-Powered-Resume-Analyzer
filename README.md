@@ -121,7 +121,11 @@ cd AI-Powered-Resume-Analyzer
 
 | Member | Primary Role | Core Contributions | Links |
 | :--- | :--- | :--- | :--- |
-| **K Phani Karthik** | Full-Stack Architect | AI Integration, Cloud Storage, Glassmorphism UI | [GitHub](https://github.com/Phanikarthik919) |
+| **Kandukoori Phani Karthik** | Frontend Lead | React UI Architecture, Glassmorphism Design, Zustand State Management | [GitHub](https://github.com/Phanikarthik919) |
+| **Gubba Shiva Mani** | Frontend Engineer | Responsive Layouts, Tailwind CSS Styling, User Components | - |
+| **Doranala Adithya** | Backend Lead | Express API Architecture, Cloudinary File Uploads, Node.js Routing | - |
+| **Sama Charan Reddy** | Backend Engineer | MongoDB Schema Design, JWT Auth Middleware, Groq AI Integration | - |
+| **Baikani Manasa** | System Architect | Data Flow Diagrams, UI/UX Wireframing, System Architecture Planning | - |
 
 ---
 *For detailed technical blueprints, see the `docs/` directory.*
