@@ -12,7 +12,8 @@
 - [🖼️ Core Project Screenshots](#-core-project-screenshots)
 - [💻 Technologies & Ecosystem](#-technologies--ecosystem)
 - [🚀 Getting Started Locally](#-getting-started-locally)
-- [👥 Team Members & Contribution Roster](#-team-members--contribution-roster)
+- [☁️ Deployment Guide](#-deployment-guide)
+- [👥 Team Workflow & Contribution](#-team-workflow--contribution)
 
 ---
 
@@ -45,12 +46,12 @@
 
 ## 🖼️ Core Project Screenshots
 
-*(Note: Please replace placeholder links with actual screenshot images in the `docs/assets/` directory)*
+*(Note: Please replace placeholder links with actual screenshot images)*
 
-- **Desktop Landing Page:** `![Landing Page](docs/assets/landing-page.png)`
-- **Primary Application Dashboard:** `![Dashboard](docs/assets/dashboard.png)`
-- **Security Access Screens:** `![Login Flow](docs/assets/login-flow.png)`
-- **Mobile Responsiveness Showcase:** `![Mobile View](docs/assets/mobile-view.png)`
+- **Desktop Landing Page:** `![Landing Page](./assets/landing-page.png)`
+- **Primary Application Dashboard:** `![Dashboard](./assets/dashboard.png)`
+- **Security Access Screens:** `![Login Flow](./assets/login-flow.png)`
+- **Mobile Responsiveness Showcase:** `![Mobile View](./assets/mobile-view.png)`
 
 ---
 
@@ -106,11 +107,44 @@ cd AI-Powered-Resume-Analyzer
 
 ---
 
-## 👥 Team Members & Contribution Roster
+## ☁️ Deployment Guide
+
+*The blueprint mapping out exactly how the application transitions from local machines to live servers.*
+
+### Infrastructure Ecosystem
+- **Frontend Target:** Hosted on **Vercel** for optimal edge-caching and CI/CD integration.
+- **Backend Target:** Hosted on **Render.com** (Web Service) to provide a stable Node.js runtime.
+- **Database Storage:** Maintained on **MongoDB Atlas**, fully decoupled from the API server.
+- **File Asset Hosting:** PDFs are stored permanently on **Cloudinary**, avoiding ephemeral storage limitations.
+
+### Backend Deployment (Render)
+- **Root Directory:** Set to `BACKEND`
+- **Build Command:** `npm install`
+- **Start Command:** `node server.js`
+- **Environment Variables:** Ensure `NODE_ENV=production` is set to correctly configure cross-site cookies, alongside MongoDB, Cloudinary, and Groq API keys.
+
+### Frontend Deployment (Vercel)
+- **Root Directory:** Set to `FRONTEND`
+- **Build Command:** Vercel auto-detects Vite (`npm run build`)
+- **Environment Variables:** Set `VITE_API_URL` to the live Render backend URL without a trailing slash.
+
+---
+
+## 👥 Team Workflow & Contribution
+
+*The governance engine of the team.*
+
+### Division of Responsibilities
+- **Frontend Engineers:** Own the `FRONTEND/` directory. Responsible for React components, state management (Zustand), UI design, and Axios integration.
+- **Backend Engineers:** Own the `BACKEND/` directory. Responsible for API definitions, MongoDB schemas, AI integration, and Cloudinary uploads.
+
+### Git Branching Strategy
+- **Features:** `feature/<kebab-case-description>` (e.g., `feature/ai-scoring-logic`)
+- **Bug Fixes:** `bugfix/<kebab-case-description>` (e.g., `bugfix/cors-cookie-block`)
+- **Hotfixes:** `hotfix/<kebab-case-description>`
+
+### Collaborator Roster
 
 | Member | Primary Role | Core Contributions | Links |
 | :--- | :--- | :--- | :--- |
 | **K Phani Karthik** | Full-Stack Architect | AI Integration, Cloud Storage, Glassmorphism UI | [GitHub](https://github.com/Phanikarthik919) |
-
----
-*For detailed technical blueprints, see the `docs/` directory.*
