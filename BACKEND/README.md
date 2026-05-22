@@ -1,4 +1,4 @@
-# ResAI Backend — Enterprise RESTful API
+ # ResAI Backend — Enterprise RESTful API
 
 A robust, enterprise-grade, secure RESTful API built on the MERN stack for the **AI-Powered Resume Analyzer**. This API supports secure authentication, intelligent PDF parsing, AI-driven resume scoring using state-of-the-art LLMs (Groq, Gemini, OpenAI), and secure media uploads via Cloudinary.
 
